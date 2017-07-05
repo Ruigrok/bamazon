@@ -1,0 +1,23 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "CLI-based Amazon-like storefront app using Node.js and MySQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ruigrok/bamazon.git"
+  },
+  "author": "Andrew Ruigrok",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ruigrok/bamazon/issues"
+  },
+  "homepage": "https://github.com/Ruigrok/bamazon#readme",
+  "dependencies": {
+    "inquirer": "^3.1.1",
+    "mysql": "^2.13.0"
+  }
+}
