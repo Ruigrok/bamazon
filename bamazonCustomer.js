@@ -30,7 +30,6 @@ var newQuantity;
 
 connection.query("SELECT id, product_name, price FROM products", function (err, res) {
     if (err) throw err;
-    console.log(res);
 
     var values = [];
 
@@ -44,13 +43,12 @@ connection.query("SELECT id, product_name, price FROM products", function (err, 
         + "\nThese are the items we currently have for sale:"
         + "\n----------------------------------------");
 
-    console.table(['id', 'product_name', 'price'], values);
+    console.table(['ID', 'Product Name', 'Price'], values);
 
     for (var i = 0; i < res.length; i++) {
         productIDs.push(String(res[i].id));
     }
-    //console.log(productIDs);
-
+  
     var start = function () {
         inquirer.prompt([
             {
@@ -77,7 +75,6 @@ connection.query("SELECT id, product_name, price FROM products", function (err, 
     start();
 
 });
-
 
 
 var checkQuantity = function (itemID, orderQuantity) {
