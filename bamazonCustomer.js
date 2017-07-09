@@ -17,9 +17,9 @@ connection.connect(function (err) {
 });
 
 
-var productIDs = [];
+var products = [];
 
-var itemID;
+var product;
 var orderQuantity;
 var currentQuantity;
 var newQuantity;
@@ -43,7 +43,7 @@ var start = function () {
         console.table(['ID', 'Product Name', 'Price'], values);
 
         for (var i = 0; i < res.length; i++) {
-            productIDs.push(String(res[i].product_name));
+            products.push(String(res[i].product_name));
         }
 
         inquirer.prompt([
@@ -55,7 +55,7 @@ var start = function () {
 
         ]).then(function (answers) {
             if (answers.purchase) {
-                promptPurchase(productIDs);
+                promptPurchase(products);
             } else {
                 console.log("++++++++++++++++++++++++++++++++++++++++"
                     + "\nCome back again soon to check our latest offers!"
@@ -68,13 +68,13 @@ var start = function () {
 
 start();
 
-function promptPurchase(productIDs) {
+function promptPurchase(products) {
     inquirer.prompt([
         {
             type: "list",
             name: "item",
             message: "Which item would you like to purchase?",
-            choices: productIDs
+            choices: products
         },
         {
             type: "input",
@@ -84,17 +84,17 @@ function promptPurchase(productIDs) {
 
     ]).then(function (answers) {
 
-        var itemID = answers.item;
+        var product = answers.item;
         var orderQuantity = answers.quantity;
 
-        checkQuantity(itemID, orderQuantity);
+        checkQuantity(product, orderQuantity);
     })
 }
 
 
-var checkQuantity = function (itemID, orderQuantity) {
+var checkQuantity = function (product, orderQuantity) {
 
-    connection.query('SELECT stock_quantity FROM products WHERE id = ?', [itemID], function (err, res) {
+    connection.query('SELECT stock_quantity FROM products WHERE product_name = ?', [product], function (err, res) {
         if (err) throw err;
 
         var currentQuantity = res[0].stock_quantity
@@ -102,25 +102,25 @@ var checkQuantity = function (itemID, orderQuantity) {
         if (orderQuantity > currentQuantity) {
             console.log("Insufficient quantity!")
         } else {
-            fulfillOrder(itemID, orderQuantity, currentQuantity);
+            fulfillOrder(product, orderQuantity, currentQuantity);
         }
     });
 
 }
 
 
-var fulfillOrder = function (itemID, orderQuantity, currentQuantity) {
+var fulfillOrder = function (product, orderQuantity, currentQuantity) {
 
     var newQuantity = currentQuantity - orderQuantity;
 
     connection.query("UPDATE products SET ? WHERE ?", [{
         stock_quantity: newQuantity
     }, {
-        id: itemID
+        product_name: product
     }], function (err, res) { });
 
     console.log("++++++++++++++++++++++++++++++++++++++++"
-        + "\nOrder Filled! " + orderQuantity + " units of Item " + itemID + " purchased"
+        + "\nOrder Filled! " + orderQuantity + " units of " + product + " purchased"
         + "\n----------------------------------------");
 
     restart();
