@@ -100,7 +100,10 @@ var checkQuantity = function (product, orderQuantity) {
         var currentQuantity = res[0].stock_quantity
 
         if (orderQuantity > currentQuantity) {
-            console.log("Insufficient quantity!")
+                console.log("++++++++++++++++++++++++++++++++++++++++"
+                    + "\nInsufficient quantity! We only have " + currentQuantity + " in stock."  
+                    + "\n----------------------------------------");
+            restart();
         } else {
             fulfillOrder(product, orderQuantity, currentQuantity);
         }
